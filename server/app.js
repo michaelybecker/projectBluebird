@@ -33,26 +33,30 @@ app.get('/', function(req, res) {
 var usernames = {};
 
 app.get('/followers/:twitterUser', function(req, res) {
-    var user = req.params.twitterUser;
-    var followers;
-    //res.send(user);
+
     client.get('followers/list.json', {
-      //  screen_name: 'michaelhazani'
-        screen_name: user
+        screen_name: req.params.twitterUser
     }, function(error, tweet, response) {
         if (error) console.log(error);
-        //res.send(response); // Tweet body.
         var response_array = JSON.parse(response["body"])["users"];
         console.log(typeof response_array); // Raw response object.
         res.send(response_array);
-
-        // for (i in response) {
-        //   console.log(response[i].screen_name);
-        // }
-        // res.send(usernames);
-        // console.log(usernames);
     });
 });
+
+//API: /following/:username retrieves array of username's following
+
+app.get('/following/:twitterUser', function (req, res){
+
+  client.get('friends/list.json', {
+    screen_name: req.params.twitterUser
+  }, function(error, user, response){
+    if (error) console.log(error);
+    var response_array = JSON.parse(response["body"])["users"];
+    console.log(typeof response_array); // Raw response object.
+    res.send(response_array);
+  })
+})
 
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!');
