@@ -119,6 +119,10 @@ namespace VRTK
             {
                 gameObjectInTheWay = hit.collider.gameObject != target.gameObject ? true : false;
                 hit.collider.gameObject.tag = "ChosenTweetSphere";
+                foreach (Transform ft in hit.collider.gameObject.transform)
+                {
+                    ft.gameObject.tag = "ChosenTweetSphere";
+                }
 
 
             }

@@ -55,6 +55,7 @@ public class CreateSphereFromNodes : MonoBehaviour
             myTextObject.transform.position.Set(myTextObject.transform.position.x, up, myTextObject.transform.position.z);
             Vector3 heading = cam.transform.position - myTextObject.transform.position;
             myTextObject.transform.LookAt(myTextObject.transform.position - heading);
+            myTextObject.transform.SetParent(uspheres[i].transform);
             i++;
             
         }

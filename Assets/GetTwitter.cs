@@ -23,8 +23,10 @@ public class GetTwitter : MonoBehaviour
 
     public void Init(string screenName, Vector3 targetVector)
     {
+
         Vector3 a = targetVector;
         Debug.Log(a);
+        Debug.Log("init fired");
         createSphereFromNodes = GameObject.Find("SphereCenter").GetComponent<CreateSphereFromNodes>();
         getFollowers(screenName, a);
     }
@@ -37,7 +39,7 @@ public class GetTwitter : MonoBehaviour
 
     IEnumerator GetText(string screenName, Vector3 targetVector)
     {
-        Debug.Log(screenName);
+        Debug.Log("screename is " + screenName);
         if (screenName != "PlayAreaScripts") { 
         string request_String = "http://localhost:3000/followers/" + screenName;
         //string request_String = "http://localhost:3000/dummy/100";
@@ -62,6 +64,9 @@ public class GetTwitter : MonoBehaviour
                 }
             }
         }
-     }
+     } else
+        {
+            Debug.Log("bummer, it's that thing again");
+        }
     }
 }
