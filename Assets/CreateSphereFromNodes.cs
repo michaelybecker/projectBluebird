@@ -5,23 +5,47 @@ using System.Collections.Generic;
 
 public class CreateSphereFromNodes : MonoBehaviour
 {
+    Camera cam;
     void Start()
     {
-        int numPoints = 360;
+        cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+    }
+
+    public void CreateSphere(string[] a)
+    {
+        int numPoints = a.Length;
         //Vector3 centerPoint;
         Vector3[] pts = PointsOnSphere(numPoints);
-        float scaling = numPoints/12;
+        float scaling = numPoints / 12;
         List<GameObject> uspheres = new List<GameObject>();
         int i = 0;
 
-        foreach (Vector3 value in pts)
-        {
+        //foreach (Vector3 value in pts)
+            for (int j = 0; j < pts.Length; j++)
+            {
+            Vector3 value = pts[j];
             uspheres.Add(GameObject.CreatePrimitive(PrimitiveType.Sphere));
             uspheres[i].transform.parent = transform;
             uspheres[i].transform.position = value * scaling;
+            GameObject myTextObject = new GameObject(a[j]);
+            myTextObject.AddComponent<TextMesh>();
+            // Get components
+            TextMesh textMeshComponent = myTextObject.GetComponent(typeof(TextMesh)) as TextMesh;
+            
+            textMeshComponent.text = a[j];
+
+            myTextObject.AddComponent<MeshRenderer>();
+            MeshRenderer meshRendererComponent = myTextObject.GetComponent(typeof(MeshRenderer)) as MeshRenderer;
+
+            myTextObject.transform.position = value * scaling;
+            float up = myTextObject.transform.position.y + (float)2.0;
+            myTextObject.transform.position.Set(myTextObject.transform.position.x, up, myTextObject.transform.position.z);
+            Vector3 heading = cam.transform.position - myTextObject.transform.position;
+            myTextObject.transform.LookAt(myTextObject.transform.position - heading);
             i++;
         }
     }
+
 
     Vector3[] PointsOnSphere(int n)
     {

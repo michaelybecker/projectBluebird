@@ -36,12 +36,13 @@ app.get('/followers/:twitterUser', function(req, res) {
     var user = req.params.twitterUser;
     var followers;
     //res.send(user);
+    console.log(user);
     client.get('followers/list.json', {
-        screen_name: 'michaelhazani'
+        screen_name: req.params.twitterUser
     }, function(error, tweet, response) {
         if (error) console.log(error);
         //res.send(response); // Tweet body.
-        var jsoned = JSON.stringify(response);
+        var jsoned = JSON.parse(response["body"]);
         res.send(jsoned);
         console.log(jsoned); // Raw response object.
 
@@ -53,14 +54,17 @@ app.get('/followers/:twitterUser', function(req, res) {
     });
 });
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+app.get('/dummyfollowers/:number', function(req, res) {
+  var num = req.params.number;
+  var followers = "";
+  for (var i = 0; i < num; i++) {
+    followers +=  i + "name, ";
+  }
+
+  var followersToSend = JSON.stringify(followers);
+  res.send(followersToSend);
 });
 
-app.get('/test', function(req, res) {
-    client.get('search/tweets', {
-        q: 'node.js'
-    }, function(error, tweets, response) {
-        console.log(tweets);
-    });
+app.listen(3000, function () {
+  console.log('app listening on port 3000!');
 });
