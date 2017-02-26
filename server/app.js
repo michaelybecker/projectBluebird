@@ -37,12 +37,14 @@ app.get('/followers/:twitterUser', function(req, res) {
     var followers;
     //res.send(user);
     client.get('followers/list.json', {
-        screen_name: 'michaelhazani'
+      //  screen_name: 'michaelhazani'
+        screen_name: user
     }, function(error, tweet, response) {
         if (error) console.log(error);
         //res.send(response); // Tweet body.
-        console.log(response); // Raw response object.
-        res.send(response);
+        var response_array = JSON.parse(response["body"])["users"];
+        console.log(typeof response_array); // Raw response object.
+        res.send(response_array);
 
         // for (i in response) {
         //   console.log(response[i].screen_name);
