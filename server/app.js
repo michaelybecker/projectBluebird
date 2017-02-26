@@ -21,11 +21,11 @@ var client = new Twitter({
     access_token_secret: creds.access_token_secret
 });
 
-var params = {
-    screen_name: 'michaelhazani'
-};
+// var params = {
+//     screen_name: 'michaelhazani'
+// };
 
-
+// TODO parsed string of users
 app.get('/', function(req, res) {
     res.send('Hello World!');
 });
@@ -37,14 +37,23 @@ function getScreenNames(user){
   return user["screen_name"];
 }
 
+function concatScreenNames (user_arr){
+  var concat;
+  user_arr.forEach(function(user){
+    concat += (user["screen_name"] + ",");
+  });
+  return concat;
+}
+
 app.get('/followers/:twitterUser', function(req, res) {
 
     client.get('followers/list.json', {
         screen_name: req.params.twitterUser
     }, function(error, tweet, response) {
         if (error) console.log(error);
-        var object_array = JSON.parse(response["body"])["users"];
-        var response_array = object_array.map(getScreenNames);
+        var response_array = JSON.parse(response["body"])["users"];
+      //  response_array = object_array.map(getScreenNames);
+      // var response_array = concatScreenNames(JSON.parse(response["body"])["users"]);
         console.log(typeof response_array); // Raw response object.
         res.send(response_array);
     });
@@ -58,8 +67,9 @@ app.get('/following/:twitterUser', function (req, res){
     screen_name: req.params.twitterUser
   }, function(error, user, response){
     if (error) console.log(error);
-    var object_array = JSON.parse(response["body"])["users"];
-    var response_array = object_array.map(getScreenNames);
+    var response_array = JSON.parse(response["body"])["users"];
+  //  response_array = object_array.map(getScreenNames);
+  // var response_array = concatScreenNames(JSON.parse(response["body"])["users"]);
     console.log(typeof response_array); // Raw response object.
     res.send(response_array);
   })
