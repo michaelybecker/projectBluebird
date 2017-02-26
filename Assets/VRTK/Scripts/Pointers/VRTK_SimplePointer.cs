@@ -68,7 +68,6 @@ namespace VRTK
                 SetPointerTransform(pointerBeamLength, pointerThickness);
                 if (rayHit)
                 {
-                    Debug.Log("hit!");
                     if (pointerCursorMatchTargetNormal)
                     {
                         pointerTip.transform.forward = -pointerCollidedWith.normal;

@@ -40,7 +40,16 @@ app.get('/followers/:twitterUser', function(req, res) {
     client.get('followers/list.json', {
         screen_name: req.params.twitterUser
     }, function(error, tweet, response) {
-        if (error) console.log(error);
+        if (error) {
+          //console.log(error)
+          var followers = "";
+          for (var i = 0; i < 100; i++) {
+            followers +=  i + "naawEGAWEdgd, ";
+          }
+          var followersToSend = JSON.stringify(followers);
+          res.send(followersToSend);
+        };
+
         //res.send(response); // Tweet body.
         var jsoned = JSON.parse(response["body"]);
         res.send(jsoned);

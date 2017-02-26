@@ -11,38 +11,52 @@ public class CreateSphereFromNodes : MonoBehaviour
         cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
     }
 
-    public void CreateSphere(string[] a)
+    public void CreateSphere(string[] a, string screenName, Vector3 targetVector)
     {
         int numPoints = a.Length;
         //Vector3 centerPoint;
         Vector3[] pts = PointsOnSphere(numPoints);
-        float scaling = numPoints / 12;
+        float scaling = numPoints / 2;
         List<GameObject> uspheres = new List<GameObject>();
         int i = 0;
 
         //foreach (Vector3 value in pts)
-            for (int j = 0; j < pts.Length; j++)
+        Debug.Log(targetVector); //already messed up
+        for (int j = 0; j < pts.Length; j++)
             {
-            Vector3 value = pts[j];
+
+                Vector3 value = pts[j];
             uspheres.Add(GameObject.CreatePrimitive(PrimitiveType.Sphere));
-            uspheres[i].transform.parent = transform;
-            uspheres[i].transform.position = value * scaling;
+            //GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            //uspheres.Add(sphere);
+            //Light tempLight = sphere.gameObject.AddComponent<Light>();
+            
+            //tempLight.color = Color.yellow;
+             uspheres[i].transform.parent = transform;
+            uspheres[i].transform.position = (value) * scaling + targetVector;
+
+            
+            uspheres[i].tag = "tweetsphere";
+            uspheres[i].name = a[j];
             GameObject myTextObject = new GameObject(a[j]);
             myTextObject.AddComponent<TextMesh>();
             // Get components
             TextMesh textMeshComponent = myTextObject.GetComponent(typeof(TextMesh)) as TextMesh;
             
             textMeshComponent.text = a[j];
-
-            myTextObject.AddComponent<MeshRenderer>();
+            textMeshComponent.fontSize = 30;
+            textMeshComponent.transform.localScale = new Vector3((float)0.1, (float)0.1, (float)0.1); 
+            //myTextObject.AddComponent<MeshRenderer>();
             MeshRenderer meshRendererComponent = myTextObject.GetComponent(typeof(MeshRenderer)) as MeshRenderer;
-
-            myTextObject.transform.position = value * scaling;
+            myTextObject.tag = "tweetsphere";
+            myTextObject.transform.position = (value) * scaling + targetVector;
+            //Debug.LogWarning(targetVector);
             float up = myTextObject.transform.position.y + (float)2.0;
             myTextObject.transform.position.Set(myTextObject.transform.position.x, up, myTextObject.transform.position.z);
             Vector3 heading = cam.transform.position - myTextObject.transform.position;
             myTextObject.transform.LookAt(myTextObject.transform.position - heading);
             i++;
+            
         }
     }
 

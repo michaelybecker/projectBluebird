@@ -1,17 +1,24 @@
-// Dash Teleport|Locomotion|20030
+    // Dash Teleport|Locomotion|20030
+
+
+
 namespace VRTK
 {
     using UnityEngine;
     using System.Collections;
 
+
     /// <summary>
     /// Event Payload
     /// </summary>
     /// <param name="hits">An array of objects that the CapsuleCast has collided with.</param>
+    /// 
+
     public struct DashTeleportEventArgs
     {
         public RaycastHit[] hits;
     }
+
 
     /// <summary>
     /// Event Payload
@@ -33,6 +40,8 @@ namespace VRTK
     /// </example>
     public class VRTK_DashTeleport : VRTK_HeightAdjustTeleport
     {
+        GetTwitter getTwitter;
+
         [Tooltip("The fixed time it takes to dash to a new position.")]
         public float normalLerpTime = 0.1f; // 100ms for every dash above minDistanceForNormalLerp
         [Tooltip("The minimum speed for dashing in meters per second.")]
@@ -102,14 +111,46 @@ namespace VRTK
             float maxDistance = Vector3.Distance(playArea.position, targetPosition - direction * 0.5f);
             RaycastHit[] allHits = Physics.CapsuleCastAll(bottomPoint, topPoint, capsuleRadius, direction, maxDistance);
 
+
+            //RAYCASTIIININNGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+
+            bool didInit = false;
             foreach (RaycastHit hit in allHits)
             {
                 gameObjectInTheWay = hit.collider.gameObject != target.gameObject ? true : false;
+                hit.collider.gameObject.tag = "ChosenTweetSphere";
+
+
             }
 
             if (gameObjectInTheWay)
             {
                 OnWillDashThruObjects(SetDashTeleportEvent(allHits));
+                getTwitter = GameObject.Find("Network").GetComponent<GetTwitter>();
+                string name = allHits[0].collider.gameObject.name;
+                allHits[0].collider.GetComponent<Renderer>().material.color = Color.cyan;
+
+                Vector3 targetVector = targetPosition;
+
+                Debug.Log("targetvector at raycast " + targetVector);
+                  var spheres = GameObject.FindGameObjectsWithTag("tweetsphere");
+                foreach (GameObject sphere in spheres)
+                    {
+                    if(sphere.tag != "ChosenTweetSphere") { 
+                    Destroy(sphere);
+                    }
+                }
+                if (!didInit) { 
+                getTwitter.Init(name, targetPosition);
+                    didInit = true;
+                    Debug.LogWarning(targetPosition);
+                    Debug.LogWarning("initting, name is " + name);
+
+                } else
+                {
+                    Debug.LogWarning("already initted");
+                }
+
             }
 
             if (maxDistance >= minDistanceForNormalLerp)
