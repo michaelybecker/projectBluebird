@@ -117,7 +117,8 @@ namespace VRTK
             bool didInit = false;
             foreach (RaycastHit hit in allHits)
             {
-                gameObjectInTheWay = hit.collider.gameObject != target.gameObject ? true : false;
+                //gameObjectInTheWay = hit.collider.gameObject != target.gameObject ? true : false;
+                gameObjectInTheWay = true;
                 hit.collider.gameObject.tag = "ChosenTweetSphere";
                 foreach (Transform ft in hit.collider.gameObject.transform)
                 {
@@ -130,7 +131,10 @@ namespace VRTK
             if (gameObjectInTheWay)
             {
                 OnWillDashThruObjects(SetDashTeleportEvent(allHits));
+
+
                 getTwitter = GameObject.Find("Network").GetComponent<GetTwitter>();
+                
                 string name = allHits[0].collider.gameObject.name;
                 allHits[0].collider.GetComponent<Renderer>().material.color = Color.cyan;
 
@@ -144,6 +148,7 @@ namespace VRTK
                     Destroy(sphere);
                     }
                 }
+                
                 if (!didInit) { 
                 getTwitter.Init(name, targetPosition);
                     didInit = true;
