@@ -15,10 +15,9 @@ public class DestroySpheres : MonoBehaviour {
         {
             Debug.Log("triggered");
            // var testcall = "tessssssssssssssst";
-            var spheres = GameObject.FindGameObjectsWithTag("tweetSphere");
+            var spheres = GameObject.FindGameObjectsWithTag("tweetsphere");
             foreach (GameObject sphere in spheres)
             {
-              //  Debug.Log("sphere");
                 Destroy(sphere);
             }
            // createSphereFromNodes = GameObject.Find("SphereCenter").GetComponent<CreateSphereFromNodes>();
