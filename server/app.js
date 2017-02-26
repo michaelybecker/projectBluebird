@@ -55,6 +55,7 @@ app.get('/followers/:twitterUser', function(req, res) {
 });
 
 app.get('/dummyfollowers/:number', function(req, res) {
+  console.log("requested");
   var num = req.params.number;
   var followers = "";
   for (var i = 0; i < num; i++) {

@@ -12,6 +12,8 @@ public class GetTwitter : MonoBehaviour
 
     void Start()
     {
+        UnityEngine.VR.VRSettings.enabled = false;
+        //CreateSphereFromNodes createSphereFromNodes = GameObject.Find("SphereCenter").
         createSphereFromNodes = GameObject.Find("SphereCenter").GetComponent<CreateSphereFromNodes>();
         getFollowers();
     }
@@ -24,7 +26,7 @@ public class GetTwitter : MonoBehaviour
 
     IEnumerator GetText()
     {
-        using (UnityWebRequest request = UnityWebRequest.Get("http://localhost:3000/dummy/256"))
+        using (UnityWebRequest request = UnityWebRequest.Get("http://localhost:3000/dummyfollowers/256"))
         {
             yield return request.Send();
 

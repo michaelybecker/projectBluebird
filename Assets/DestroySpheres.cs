@@ -14,13 +14,13 @@ public class DestroySpheres : MonoBehaviour {
         if (Input.GetKeyUp(KeyCode.D))
         {
             Debug.Log("triggered");
-            var testCall = "tessssssssssssssst";
+            var testcall = "tessssssssssssssst";
             var spheres = GameObject.FindGameObjectsWithTag("tweetSphere");
-            foreach( GameObject sphere in spheres)
+            foreach (GameObject sphere in spheres)
             {
                 Debug.Log("sphere");
             }
-  
+
         }
     }
 }

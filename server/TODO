@@ -1,4 +1,4 @@
 [done?]0. add tags to all spheres
-1. create an event triggered with keyboard that Debug.log()s
+[done]1. create an event triggered with keyboard that Debug.log()s
 2. have the event destroy all spheres
 3. have the event also repopulate the spheres with a new api call
