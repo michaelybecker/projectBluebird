@@ -22,6 +22,7 @@ public class GetTwitter : MonoBehaviour
             else // Success
             {
                 Debug.Log(request.downloadHandler.text);
+                Debug.Log(request.downloadHandler);
             }
         }
     }

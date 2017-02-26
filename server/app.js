@@ -41,8 +41,9 @@ app.get('/followers/:twitterUser', function(req, res) {
     }, function(error, tweet, response) {
         if (error) console.log(error);
         //res.send(response); // Tweet body.
-        console.log(response); // Raw response object.
-        res.send(response);
+        var jsoned = JSON.stringify(response);
+        res.send(jsoned);
+        console.log(jsoned); // Raw response object.
 
         // for (i in response) {
         //   console.log(response[i].screen_name);
