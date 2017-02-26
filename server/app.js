@@ -32,13 +32,19 @@ app.get('/', function(req, res) {
 
 var usernames = {};
 
+function getScreenNames(user){
+  console.log(user["screen_name"])
+  return user["screen_name"];
+}
+
 app.get('/followers/:twitterUser', function(req, res) {
 
     client.get('followers/list.json', {
         screen_name: req.params.twitterUser
     }, function(error, tweet, response) {
         if (error) console.log(error);
-        var response_array = JSON.parse(response["body"])["users"];
+        var object_array = JSON.parse(response["body"])["users"];
+        var response_array = object_array.map(getScreenNames);
         console.log(typeof response_array); // Raw response object.
         res.send(response_array);
     });
@@ -52,7 +58,8 @@ app.get('/following/:twitterUser', function (req, res){
     screen_name: req.params.twitterUser
   }, function(error, user, response){
     if (error) console.log(error);
-    var response_array = JSON.parse(response["body"])["users"];
+    var object_array = JSON.parse(response["body"])["users"];
+    var response_array = object_array.map(getScreenNames);
     console.log(typeof response_array); // Raw response object.
     res.send(response_array);
   })
