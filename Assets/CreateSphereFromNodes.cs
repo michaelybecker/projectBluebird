@@ -24,6 +24,8 @@ public class CreateSphereFromNodes : MonoBehaviour
             for (int j = 0; j < pts.Length; j++)
             {
             Vector3 value = pts[j];
+           // var _sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+           // _sphere.tag = "tweetSphere";
             uspheres.Add(GameObject.CreatePrimitive(PrimitiveType.Sphere));
             uspheres[i].transform.parent = transform;
             uspheres[i].transform.position = value * scaling;
