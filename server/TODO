@@ -1,4 +1,10 @@
-[done?]0. add tags to all spheres
+[done]0. add tags to all spheres
 [done]1. create an event triggered with keyboard that Debug.log()s
-2. have the event destroy all spheres
-3. have the event also repopulate the spheres with a new api call
+[done]2. have the event destroy all spheres
+[done]2.5 have the event destroy the meshes as well
+[done]3. have the event also repopulate the spheres with a new api call
+
+instructions:
+1. add destroyspheres script to GameObject
+2. add tags in sphere creation code  to : textMeshComponent and uspheres[i]
+3. paramaterize Init for startup on Getweets class

@@ -10,23 +10,32 @@ public class GetTwitter : MonoBehaviour
     public CreateSphereFromNodes createSphereFromNodes;
 
 
-    void Start()
+    public void Start()
     {
-        UnityEngine.VR.VRSettings.enabled = false;
-        //CreateSphereFromNodes createSphereFromNodes = GameObject.Find("SphereCenter").
+        // Debug.Log("hello world!");
+        // createSphereFromNodes = GameObject.Find("SphereCenter").GetComponent<CreateSphereFromNodes>();
+        // getFollowers();
+        //
+        string initScreenName = "25";
+        Init(initScreenName);
+    }
+
+    public void Init(string screenName)
+    {
+        Debug.Log("hello world!");
         createSphereFromNodes = GameObject.Find("SphereCenter").GetComponent<CreateSphereFromNodes>();
-        getFollowers();
+        getFollowers(screenName);
+    }
+ 
+    void getFollowers(string screenName)
+    {
+        StartCoroutine(GetText(screenName));
     }
 
-
-    void getFollowers()
+    IEnumerator GetText(string screenName)
     {
-        StartCoroutine(GetText());
-    }
-
-    IEnumerator GetText()
-    {
-        using (UnityWebRequest request = UnityWebRequest.Get("http://localhost:3000/dummyfollowers/256"))
+        string request_String = "http://localhost:3000/dummyfollowers/" + screenName;
+        using (UnityWebRequest request = UnityWebRequest.Get(request_String))
         {
             yield return request.Send();
 
@@ -42,10 +51,8 @@ public class GetTwitter : MonoBehaviour
                 createSphereFromNodes.CreateSphere(response);
                 for (int i = 0; i < response.Length; i++)
                 {
-                    Debug.Log(response[i]);
+                   // Debug.Log(response[i]);
                 }
-
-
             }
         }
     }

@@ -27,6 +27,7 @@ public class CreateSphereFromNodes : MonoBehaviour
            // var _sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
            // _sphere.tag = "tweetSphere";
             uspheres.Add(GameObject.CreatePrimitive(PrimitiveType.Sphere));
+            uspheres[i].tag = "tweetSphere";
             uspheres[i].transform.parent = transform;
             uspheres[i].transform.position = value * scaling;
             GameObject myTextObject = new GameObject(a[j]);
@@ -35,7 +36,7 @@ public class CreateSphereFromNodes : MonoBehaviour
             TextMesh textMeshComponent = myTextObject.GetComponent(typeof(TextMesh)) as TextMesh;
             
             textMeshComponent.text = a[j];
-
+            textMeshComponent.tag = "tweetSphere";
             myTextObject.AddComponent<MeshRenderer>();
             MeshRenderer meshRendererComponent = myTextObject.GetComponent(typeof(MeshRenderer)) as MeshRenderer;
 
