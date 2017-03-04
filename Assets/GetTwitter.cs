@@ -55,12 +55,13 @@ public class GetTwitter : MonoBehaviour
             }
             else // Success
             {
-                string[] response = request.downloadHandler.text.Split(',');
-                Debug.Log("get twitter script tvector: " + a); // already messed up
-                createSphereFromNodes.CreateSphere(response, screenName, a);
+                string[] response = { request.downloadHandler.text, request.downloadHandler.text };
+                //TYYYYPPE loadedData = JsonUtility.FromJson<TYYYPE>(response);
+                    //Debug.Log("get twitter script tvector: " + a); // already messed up
+                    createSphereFromNodes.CreateSphere(response, screenName, a);
                 for (int i = 0; i < response.Length; i++)
                 {
-                    // Debug.Log(response[i]);
+                     Debug.Log(response[i]);
                 }
             }
         }

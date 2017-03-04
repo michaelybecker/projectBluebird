@@ -6,6 +6,8 @@
 /Assets/AssetStoreTools*
 node_modules
 server/creds.js
+server/credsss.js
+server/credssss.js
 # Visual Studio 2015 cache directory
 /.vs/
 
