@@ -43,9 +43,7 @@ public class GetTwitter : MonoBehaviour
 		if (screenName != "PlayAreaScripts")
 		{ 
 			string request_String = "http://localhost:3000/followers/" + screenName;
-			//string request_String = "http://localhost:3000/dummy/100";
 			Vector3 a = targetVector;
-			//Debug.Log("gettwitter " + a);
 			using (UnityWebRequest request = UnityWebRequest.Get(request_String))
 			{
 				yield return request.Send();
@@ -57,22 +55,18 @@ public class GetTwitter : MonoBehaviour
 				else // Success
 				{
 					string response = request.downloadHandler.text;
-//					Followers loadedData = JsonUtility.FromJson<Followers>(response);
-//					foreach (var re in loadedData.singleFollowers)
-//					{ 
-//						//Debug.Log(re);
-//					}
 					SingleFollower[] loadedData = JsonHelper.getJsonArray<SingleFollower>(response);
 					foreach (var re in loadedData)
 					{ 
 						Debug.Log(re.screen_name);
 					}
+					createSphereFromNodes.CreateSphere(loadedData, screenName, targetVector);
 				}
 			}
 		}
 		else
 		{
-			Debug.Log("bummer, it's that thing again");
+			Debug.Log("hit Raycast hit PlayAreaScripts!");
 		}
 	}
 }
