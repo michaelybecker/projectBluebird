@@ -55,22 +55,45 @@ app.get('/followers/:twitterUser', function(req, res) {
     var localJSON;
     fs.readFile(path, "utf-8", function(err, data) {
       var form = data.replace(/\\/g, "");
-      localJSON = JSON.parse(form);
-      var formattedStr = localJSON.replace(/\\/g, "");
+      localJSON = JSON.parse(data);
+      //var formattedStr = localJSON.replace(/\\/g, "");
       if(err) throw err
 
+      //create data objects that'll be passed to twitter
 
-    // res.send(JSON.stringify(localJSON));
-    // for (var i = 0; i < 30; i++){
-      console.log(formattedStr);
-      // var temp = JSON.parse(localJSON["body"]);
-      // for (var key in temp) {
-        // if (temp.hasOwnProperty(key)) {
-          // console.log(localJSON);
-        // }
-      // }
 
-    // }
+
+      // array in object, or object?
+      var followers = [];
+      // followers.follower = [];
+
+      var body = JSON.parse(localJSON["body"]);
+      var users = (body["users"]);
+      for (obj in users) {
+        var tempfollower = {};
+
+        tempfollower["id"] = users[obj]["id"];
+        tempfollower["screen_name"] = users[obj]["screen_name"];
+        tempfollower["name"] = users[obj]["name"];
+        tempfollower["location"] = users[obj]["location"];
+        tempfollower["url"] = users[obj]["url"];
+        tempfollower["description"] = users[obj]["description"];
+        tempfollower["followers_count"] = users[obj]["followers_count"];
+        tempfollower["friends_count"] = users[obj]["friends_count"];
+        //array
+        // followers.follower.push(tempfollower);
+
+        //object
+        followers.push(tempfollower);
+
+      }
+
+      var followersString = JSON.stringify(followers);
+      res.send(followersString);
+
+      //test locally
+          console.log(followers);
+
     console.log("sent followers//local!");
 
     });

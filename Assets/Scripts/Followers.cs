@@ -3,7 +3,7 @@ using UnityEngine;
 
 [System.Serializable]
 
-public class Followers {
-
-    SingleFollower[] singleFollowers;
+public class Followers
+{
+	public SingleFollower[] singleFollowers;
 }
