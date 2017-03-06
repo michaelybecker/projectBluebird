@@ -1,6 +1,10 @@
 // testing / real query flag
 var offline = true;
 
+  if (process.argv[2] == "online") {
+  offline = false;
+  }
+
 var express = require('express');
 var app = express();
 var fs = require('fs');
