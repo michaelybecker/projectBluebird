@@ -1,9 +1,9 @@
 // testing / real query flag
 var offline = true;
 
-  if (process.argv[2] == "online") {
-  offline = false;
-  }
+if (process.argv[2] == "online") {
+    offline = false;
+}
 
 var express = require('express');
 var app = express();
@@ -38,13 +38,15 @@ app.listen(3000, function() {
     console.log('Example app listening on port 3000!');
     if (offline) {
         console.log('Running in Offline test mode!');
+        getFollowers('michaelhazani');
     } else {
         console.log('WARNING: running LIVE!');
+        getFollowers('michaelhazani');
     }
 });
 
-app.get('/followers/:twitterUser', function(req, res) {
-    var localJSON;
+function getFollowers(username) {
+    var localJSON, followersString;
     if (offline) {
         var path = __dirname + "/dummyData/dummy.JSON";
         fs.readFile(path, "utf-8", function(err, data) {
@@ -52,34 +54,38 @@ app.get('/followers/:twitterUser', function(req, res) {
             // console.log(data);
             var parsedData = JSON.parse(data);
             var followers = CreateFollowersObject(parsedData);
-            // console.log(parsedData);
             var followersString = JSON.stringify(followers);
-            res.send(followersString);
-            console.log("sent followers//local!");
+            console.log("sending followers//local!");
+            console.log(followers);
+            return followersString;
         });
     } else {
         client.get('followers/list.json', {
-            screen_name: req.params.twitterUser
+            screen_name: username
         }, function(error, tweet, response) {
-console.log("live: ");
-          console.log(response);
+            console.log("live: ");
+            // console.log(response);
             if (error) console.log(error);
             //localJSON = response;
             var followers = CreateFollowersObject(response);
             var followersString = JSON.stringify(followers);
-            res.send(followersString);
-            console.log("sent followers//LIVE FROM API");
-
-            // for dummy local JSON file creation - do not touch otherwise
-            // var path = __dirname + "/dummyData/dummy.JSON";
-            // fs.writeFile(path, responseStr, function(err) {
-            //   if(err) {
-            //     return console.log(err);
-            //   }
-            //   console.log("file saved!");
-            // })
+            console.log("sending followers//LIVE FROM API");
+            console.log(followers);
+            return followersString;
         });
     }
+}
+
+app.get('/followers/:twitterUser', function(req, res) {
+res.send(getFollowers(req.params.twitterUser));
+// for dummy local JSON file creation - do not touch otherwise
+// var path = __dirname + "/dummyData/dummy.JSON";
+// fs.writeFile(path, responseStr, function(err) {
+//   if(err) {
+//     return console.log(err);
+//   }
+//   console.log("file saved!");
+// })
 });
 
 //API: /following/:username retrieves array of username's following
