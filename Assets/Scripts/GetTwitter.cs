@@ -12,13 +12,9 @@ public class GetTwitter : MonoBehaviour
 
 	public void Start()
 	{
-		// Debug.Log("hello world!");
-		// createSphereFromNodes = GameObject.Find("SphereCenter").GetComponent<CreateSphereFromNodes>();
-		// getFollowers();
-		//
 		string initScreenName = "michaelhazani";
-		Vector3 initVector = new Vector3(0, 0, 0);
-		Init(initScreenName, initVector);
+		createSphereFromNodes = GameObject.Find("SphereCenter").GetComponent<CreateSphereFromNodes>();
+		Init("michaelhazani", new Vector3(0, 0, 0));
 	}
 
 	public void Init(string screenName, Vector3 targetVector)
@@ -27,7 +23,6 @@ public class GetTwitter : MonoBehaviour
 		Vector3 a = targetVector;
 		Debug.Log(a);
 		Debug.Log("init fired");
-		createSphereFromNodes = GameObject.Find("SphereCenter").GetComponent<CreateSphereFromNodes>();
 		getFollowers(screenName, a);
 	}
 
@@ -55,11 +50,23 @@ public class GetTwitter : MonoBehaviour
 				else // Success
 				{
 					string response = request.downloadHandler.text;
+//					print(response);
 					SingleFollower[] loadedData = JsonHelper.getJsonArray<SingleFollower>(response);
-					foreach (var re in loadedData)
-					{ 
-						Debug.Log(re.screen_name);
-					}
+
+//					foreach (var re in loadedData)
+//					{ 
+//						Debug.Log(re.profile_image_url);
+//						print(re.id);
+//						print(re.screen_name);
+//						print(re.name);
+//						print(re.location);
+//						print(re.url);
+//						print(re.description);
+//						print(re.followers_count);
+//						print(re.friends_count);
+//						print(re.profile_image_url);
+//						print("\n");
+//					}
 					createSphereFromNodes.CreateSphere(loadedData, screenName, targetVector);
 				}
 			}

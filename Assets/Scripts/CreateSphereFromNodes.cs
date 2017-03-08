@@ -5,15 +5,17 @@ using System.Collections.Generic;
 
 public class CreateSphereFromNodes : MonoBehaviour
 {
-    public GameObject LightSphere;
-    public GameObject SphereLitFromWithin;
-    List<GameObject> uspheres;
-    public float turnSpeed;
-    Camera cam;
+	public GameObject LightSphere;
+	public GameObject SphereLitFromWithin;
+	List<GameObject> uspheres;
+	public float turnSpeed;
+	Camera cam;
 
 	void Start()
 	{
 		cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+		uspheres = new List<GameObject>();
+
 	}
 		
 	//    public void CreateSphere(string[] a, string screenName, Vector3 targetVector)
@@ -23,66 +25,49 @@ public class CreateSphereFromNodes : MonoBehaviour
 		//Vector3 centerPoint;
 		Vector3[] pts = PointsOnSphere(numPoints);
 		float scaling = numPoints / 2;
-		uspheres = new List<GameObject>();
-		int i = 0;
 
-        //foreach (Vector3 value in pts)
-        //        Debug.Log(targetVector); //already messed up
 
-            for (int j = 0; j < pts.Length; j++)
+		//foreach (Vector3 value in pts)
+		//        Debug.Log(targetVector); //already messed up
+
+		for (int j = 0; j < pts.Length; j++)
 		{
 
 			Vector3 value = pts[j];
-            //uspheres.Add(GameObject.CreatePrimitive(PrimitiveType.Sphere));
-            var tweetParentComponent = new GameObject();
-            var ab = Instantiate(SphereLitFromWithin);
-            //Debug.Log(ab.GetType());
-            ab.transform.parent = tweetParentComponent.transform;
-            ab.transform.position = (value) * scaling + targetVector;
-            //Light lightSphere = sphere.AddComponent<Light>();
-            //Component halo = lightSphere.GetComponent("Halo");
-            //lightSphere.type = LightType.Point;
-            //lightSphere.GetComponent(Halo).enabled = true;
-            //uspheres.Add(sphere);
-            //Light tempLight = sphere.gameObject.AddComponent<Light>();
 
-            //tempLight.color = Color.yellow;
+			var tweetParentComponent = new GameObject();
+			var ab = Instantiate(SphereLitFromWithin);
+			uspheres.Add(tweetParentComponent);
+			ab.transform.parent = tweetParentComponent.transform;
+			ab.transform.localPosition = new Vector3(0, 0, 0);
 
-            uspheres.Add(tweetParentComponent);
-
-            uspheres[j].tag = "tweetsphere";
+			uspheres[j].tag = "tweetsphere";
 			uspheres[j].name = a[j].screen_name;
 			GameObject myTextObject = new GameObject(a[j].screen_name);
 			myTextObject.AddComponent<TextMesh>();
 			TextMesh textMeshComponent = myTextObject.GetComponent(typeof(TextMesh)) as TextMesh;
-            
 			textMeshComponent.text = a[j].screen_name;
 			textMeshComponent.fontSize = 30;
-            textMeshComponent.anchor = TextAnchor.MiddleCenter;
-            textMeshComponent.transform.localScale = new Vector3((float)0.1, (float)0.1, (float)0.1); 
+			textMeshComponent.anchor = TextAnchor.MiddleCenter;
+			textMeshComponent.transform.localScale = new Vector3((float)0.1, (float)0.1, (float)0.1); 
+			myTextObject.tag = "tweetsphere";
+			ab.transform.localPosition = new Vector3(0, 0, 0);
 			//myTextObject.AddComponent<MeshRenderer>();
 			MeshRenderer meshRendererComponent = myTextObject.GetComponent(typeof(MeshRenderer)) as MeshRenderer;
-			myTextObject.tag = "tweetsphere";
-
-            //Debug.LogWarning(targetVector);
 
 
-            myTextObject.transform.SetParent(uspheres[j].transform);
-            myTextObject.transform.position = (value) * scaling + targetVector;
-            float up = myTextObject.transform.position.z - 16.0f;
-            Vector3 newVector = myTextObject.transform.position + Vector3.down;
-            myTextObject.transform.position = newVector;
-            Vector3 heading = cam.transform.position - myTextObject.transform.position;
-            myTextObject.transform.LookAt(myTextObject.transform.position - heading);
+			myTextObject.transform.SetParent(tweetParentComponent.transform);
+			Vector3 newVector = myTextObject.transform.position + Vector3.down;
+			myTextObject.transform.position = newVector;
 
-			//i++;
+//			tweetParentComponent.transform.position = (value) * scaling + targetVector;
+			tweetParentComponent.transform.position = (value) * scaling + Vector3.left * numPoints / 2;
 
-            //uspheres[j].transform.parent = transform;
-            //uspheres[j].transform.position = (value) * scaling + targetVector;
+			Vector3 heading = cam.transform.position - myTextObject.transform.position;
+			myTextObject.transform.LookAt(myTextObject.transform.position - heading);
 
-
-        }
-    }
+		}
+	}
 
 
 	Vector3[] PointsOnSphere(int n)
@@ -110,13 +95,18 @@ public class CreateSphereFromNodes : MonoBehaviour
 		return pts;
 	}
 
-void Update()
-{
-        foreach (GameObject obj in uspheres) {
-            obj.transform.GetChild(0).transform.Rotate(Vector3.up, turnSpeed * Time.deltaTime);
-        }
+	void Update()
+	{
+		if (uspheres.Count > 0)
+		{
+			foreach (GameObject obj in uspheres)
+			{
+				
+				obj.transform.GetChild(0).transform.Rotate(Vector3.up, turnSpeed * Time.deltaTime);
+			}
+		}
     
 
-    }
+	}
 
 }

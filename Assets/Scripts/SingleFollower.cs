@@ -13,4 +13,6 @@ public struct SingleFollower
 	public string description;
 	public string followers_count;
 	public string friends_count;
+	public string profile_image_url;
+
 }
