@@ -9,7 +9,7 @@ var express = require('express');
 var app = express();
 var fs = require('fs');
 var Twitter = require('twitter');
-var creds = require('./creds/creds.js');
+var creds = require('./creds/credsss.js');
 var errMsg, sucMsg;
 var error = function(err, response, body) {
     console.log('ERROR \n');

@@ -1,20 +1,37 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityStandardAssets.Characters.FirstPerson;
 
+//using UnityEngine.Events
 
 public class GetTwitter : MonoBehaviour
 {
 	public SingleFollower[] loadedData;
 	//ArrayList FollowersList = new ArrayList();
 	public CreateSphereFromNodes createSphereFromNodes;
-
+	//	public GameObject player;
+	public FirstPersonController controller;
+	public UnityEngine.UI.InputField inputField;
 
 	public void Start()
 	{
 		string initScreenName = "michaelhazani";
 		createSphereFromNodes = GameObject.Find("SphereCenter").GetComponent<CreateSphereFromNodes>();
-		Init("michaelhazani", new Vector3(0, 0, 0));
+
+		inputField.Select();
+
+
+	}
+
+	//	public void enter
+	public void UIHelper(string a)
+	{
+		inputField.text = "";
+		Destroy(inputField.gameObject);
+		controller.GetComponent<FirstPersonController>().enabled = true;
+		Init(a, new Vector3(0, 0, 0));
+
 	}
 
 	public void Init(string screenName, Vector3 targetVector)
@@ -50,23 +67,9 @@ public class GetTwitter : MonoBehaviour
 				else // Success
 				{
 					string response = request.downloadHandler.text;
-//					print(response);
+
 					loadedData = JsonHelper.getJsonArray<SingleFollower>(response);
 
-//					foreach (var re in loadedData)
-//					{ 
-//						Debug.Log(re.profile_image_url);
-//						print(re.id);
-//						print(re.screen_name);
-//						print(re.name);
-//						print(re.location);
-//						print(re.url);
-//						print(re.description);
-//						print(re.followers_count);
-//						print(re.friends_count);
-//						print(re.profile_image_url);
-//						print("\n");
-//					}
 					createSphereFromNodes.CreateSphere(loadedData, screenName, targetVector);
 				}
 			}

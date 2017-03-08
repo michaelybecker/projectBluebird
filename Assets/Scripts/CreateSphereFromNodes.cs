@@ -12,6 +12,7 @@ public class CreateSphereFromNodes : MonoBehaviour
 	public float turnSpeed;
 	public Font Exo, Titillum;
 	Camera cam;
+	Color pink = new Color(243 / 255.0F, 41 / 255.0F, 190 / 255.0F, 1);
 
 	void Start()
 	{
@@ -52,8 +53,6 @@ public class CreateSphereFromNodes : MonoBehaviour
 			myTextObject.AddComponent<TextMesh>();
 			TextMesh textMeshComponent = myTextObject.GetComponent(typeof(TextMesh)) as TextMesh;
 			textMeshComponent.font = Exo;
-//			textMeshComponent.font.material = Titillum.material;
-//			textMeshComponent.GetComponent<material>() = Titillum.material;
 			textMeshComponent.text = a[j].screen_name;
 			textMeshComponent.fontSize = 50;
 			textMeshComponent.anchor = TextAnchor.MiddleCenter;
@@ -70,29 +69,29 @@ public class CreateSphereFromNodes : MonoBehaviour
 			Color scaleColor;
 			if (fNum < 100)
 			{
-				sphereSizePct = 0.3f;
-				scaleColor = Color.red;
+				sphereSizePct = 1.0f;
 
+				scaleColor = pink;
 			}
 			else if (fNum < 500)
 			{
-				sphereSizePct = 0.6f;
-				scaleColor = Color.green;
+				sphereSizePct = 1.5f;
+				scaleColor = Color.red;
 			}
 			else if (fNum < 1000)
 			{
-				sphereSizePct = 0.9f;
+				sphereSizePct = 3.0f;
 				scaleColor = Color.yellow;
 			}
 			else if (fNum < 5000)
 			{
-				sphereSizePct = 1.1f;
-				scaleColor = Color.red;
+				sphereSizePct = 10.0f;
+				scaleColor = Color.white;
 			}
 			else
 			{
-				sphereSizePct = 1.2f;
-				scaleColor = Color.magenta;
+				sphereSizePct = 15f;
+				scaleColor = Color.blue;
 			}
 
 			ab.transform.localScale *= sphereSizePct;
