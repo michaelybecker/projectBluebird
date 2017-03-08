@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 public class GetTwitter : MonoBehaviour
 {
-
+	public SingleFollower[] loadedData;
 	//ArrayList FollowersList = new ArrayList();
 	public CreateSphereFromNodes createSphereFromNodes;
 
@@ -51,7 +51,7 @@ public class GetTwitter : MonoBehaviour
 				{
 					string response = request.downloadHandler.text;
 //					print(response);
-					SingleFollower[] loadedData = JsonHelper.getJsonArray<SingleFollower>(response);
+					loadedData = JsonHelper.getJsonArray<SingleFollower>(response);
 
 //					foreach (var re in loadedData)
 //					{ 

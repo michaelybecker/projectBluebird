@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class CreateSphereFromNodes : MonoBehaviour
 {
@@ -9,13 +10,15 @@ public class CreateSphereFromNodes : MonoBehaviour
 	public GameObject SphereLitFromWithin;
 	List<GameObject> uspheres;
 	public float turnSpeed;
+	public Font Exo, Titillum;
 	Camera cam;
 
 	void Start()
 	{
 		cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 		uspheres = new List<GameObject>();
-
+//		Exo = (Font)Resources.Load("Exo.otf");
+//		Titillum = (Font)Resources.Load("Titillum.otf");
 	}
 		
 	//    public void CreateSphere(string[] a, string screenName, Vector3 targetVector)
@@ -37,23 +40,65 @@ public class CreateSphereFromNodes : MonoBehaviour
 
 			var tweetParentComponent = new GameObject();
 			var ab = Instantiate(SphereLitFromWithin);
+
+			int fNum = Convert.ToInt32(a[j].followers_count);
 			uspheres.Add(tweetParentComponent);
 			ab.transform.parent = tweetParentComponent.transform;
 			ab.transform.localPosition = new Vector3(0, 0, 0);
-
-			uspheres[j].tag = "tweetsphere";
-			uspheres[j].name = a[j].screen_name;
+			Collider col = ab.AddComponent<SphereCollider>();
+			ab.tag = "tweetsphere";
+			ab.name = a[j].screen_name;
 			GameObject myTextObject = new GameObject(a[j].screen_name);
 			myTextObject.AddComponent<TextMesh>();
 			TextMesh textMeshComponent = myTextObject.GetComponent(typeof(TextMesh)) as TextMesh;
+			textMeshComponent.font = Exo;
+//			textMeshComponent.font.material = Titillum.material;
+//			textMeshComponent.GetComponent<material>() = Titillum.material;
 			textMeshComponent.text = a[j].screen_name;
-			textMeshComponent.fontSize = 30;
+			textMeshComponent.fontSize = 50;
 			textMeshComponent.anchor = TextAnchor.MiddleCenter;
 			textMeshComponent.transform.localScale = new Vector3((float)0.1, (float)0.1, (float)0.1); 
+			MeshRenderer meshRendererComponent = myTextObject.GetComponentInChildren<MeshRenderer>();
+			meshRendererComponent.material = textMeshComponent.font.material;
 			myTextObject.tag = "tweetsphere";
+			myTextObject.name = a[j].screen_name;
 			ab.transform.localPosition = new Vector3(0, 0, 0);
 			//myTextObject.AddComponent<MeshRenderer>();
-			MeshRenderer meshRendererComponent = myTextObject.GetComponent(typeof(MeshRenderer)) as MeshRenderer;
+
+			//per size of followers
+			float sphereSizePct;
+			Color scaleColor;
+			if (fNum < 100)
+			{
+				sphereSizePct = 0.3f;
+				scaleColor = Color.red;
+
+			}
+			else if (fNum < 500)
+			{
+				sphereSizePct = 0.6f;
+				scaleColor = Color.green;
+			}
+			else if (fNum < 1000)
+			{
+				sphereSizePct = 0.9f;
+				scaleColor = Color.yellow;
+			}
+			else if (fNum < 5000)
+			{
+				sphereSizePct = 1.1f;
+				scaleColor = Color.red;
+			}
+			else
+			{
+				sphereSizePct = 1.2f;
+				scaleColor = Color.magenta;
+			}
+
+			ab.transform.localScale *= sphereSizePct;
+			ab.GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+			ab.GetComponent<Renderer>().material.SetColor("_EmissionColor", scaleColor);
+			ab.GetComponent<Renderer>().material.color = scaleColor;
 
 
 			myTextObject.transform.SetParent(tweetParentComponent.transform);
