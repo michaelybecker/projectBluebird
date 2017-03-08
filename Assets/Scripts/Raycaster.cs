@@ -7,6 +7,7 @@ public class Raycaster : MonoBehaviour
 	SingleFollower[] loadedData;
 	Camera cam;
 	PopulateGUI populateGUI;
+	string currentTarget;
 	// Use this for initialization
 	void Start()
 	{
@@ -17,28 +18,30 @@ public class Raycaster : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (Input.GetMouseButtonDown(0))
+//		if (Input.GetMouseButtonDown(0))
+//		{
+		Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+		RaycastHit hit;
+		if (Physics.Raycast(ray, out hit))
 		{
-			Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-			RaycastHit hit;
-			if (Physics.Raycast(ray, out hit))
+			if ((hit.collider.tag == "tweetsphere") && (hit.collider.name != currentTarget))
 			{
-				Debug.Log(hit);
-				if (hit.collider.tag == "tweetsphere")
-				{
-					print(hit.collider.name);
+				currentTarget = hit.collider.name;
+				populateGUI.Populate(hit.collider.name);
 
-					populateGUI.Populate(hit.collider.name);
-
-				}
 			}
-			else
+		}
+		else
+		{
+			if (currentTarget != "")
 			{
-				print("empty");
+				currentTarget = "";
+
 				populateGUI.Populate("");
 			}
-
 		}
+
+//		}
 
 	}
 
