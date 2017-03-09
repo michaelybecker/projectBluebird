@@ -9,7 +9,7 @@ var express = require('express');
 var app = express();
 var fs = require('fs');
 var Twitter = require('twitter');
-var creds = require('./creds/credsss.js');
+var creds = require('./creds/credss.js');
 var errMsg, sucMsg;
 var error = function(err, response, body) {
     console.log('ERROR \n');
@@ -46,14 +46,6 @@ app.get('/followers/:twitterUser', function(req, res) {
     // console.log(res);
     getFollowers(req.params.twitterUser, -1, res);
 });
-// for dummy local JSON file creation - do not touch otherwise
-// var path = __dirname + "/dummyData/dummy.JSON";
-// fs.writeFile(path, responseStr, function(err) {
-//   if(err) {
-//     return console.log(err);
-//   }
-//   console.log("file saved!");
-// })
 
 //-----------------------------------DATA FETCHING/PARSING HELPERS---------------------------------------------
 var totalFollowersJSON = [];
@@ -62,15 +54,26 @@ function getFollowers(username, curCursor, res) { //Twitter API: Get Followers
     // console.log("getFollowers res,: ")
     // console.log(res);
     var localJSON;
+    var path;
     if (offline) {
-        var path = __dirname + "/dummyData/dummy-20.JSON";
+        if (username == "1") {
+            path = __dirname + "/dummyData/1.JSON";
+        } else if (username == "2") {
+            path = __dirname + "/dummyData/2.JSON";
+        } else if (username == "3") {
+            path = __dirname + "/dummyData/3.JSON";
+        } else if (username == "4") {
+            path = __dirname + "/dummyData/4.JSON";
+        } else {
+            path = __dirname + "/dummyData/dummy-20.JSON";
+        }
         fs.readFile(path, "utf-8", function(err, data) {
             if (err) throw err;
             // console.log(data);
             var parsedData = JSON.parse(data);
             var followers = CreateFollowersObject(parsedData);
             followersString = JSON.stringify(followers);
-            console.log("sending followers//local!");
+            console.log("sending followers//local! #" + username);
             res.send(followersString);
         });
 
@@ -111,6 +114,18 @@ function getFollowers(username, curCursor, res) { //Twitter API: Get Followers
                 } else {
                     var totalFollowersString = JSON.stringify(totalFollowersJSON);
                     res.send(totalFollowersString);
+
+                    // for dummy local JSON file creation - do not touch otherwise
+                    // var fullMsgString = JSON.stringify(response);
+                    // var path = __dirname + "/dummyData/4.JSON";
+                    // fs.writeFile(path, fullMsgString, function(err) {
+                    //     if (err) {
+                    //         return console.log(err);
+                    //     }
+                    //     console.log("file saved!");
+                    // });
+
+
                 }
             }
         });
