@@ -13,14 +13,16 @@ public class PopulateGUI : MonoBehaviour
 	public UnityEngine.UI.Text Followers;
 	public UnityEngine.UI.Text Following;
 	public UnityEngine.UI.Image Photo;
+    public UnityEngine.UI.Image infoPanel;
 	string fullResPhoto;
-
+    AudioSource pick;
 
 	//	public GUI
 	// Use this for initialization
 	void Start()
 	{
-//		defaulter = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f); 
+        //		defaulter = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f); 
+        pick = GetComponent<AudioSource>();
 	}
 	
 	// Update is called once per frame
@@ -35,34 +37,39 @@ public class PopulateGUI : MonoBehaviour
 		loadedData = GameObject.Find("Network").GetComponent<GetTwitter>().loadedData;
 		if (name != "")
 		{
-			//print("populating " + name);
+            infoPanel.enabled = true;
+            //print("populating " + name);
 
-			for (int i = 0; i < loadedData.Length; i++)
+            for (int i = 0; i < loadedData.Length; i++)
 			{
 				if (name == loadedData[i].screen_name)
 				{
-//				print("Found at " + i);
-					SingleFollower picked = loadedData[i];
-//				Debug.Log(loadedData[i].name + "\n" + loadedData[i].description + "\n" + loadedData[i].followers_count);
+                    pick.Play();
+                    SingleFollower picked = loadedData[i];
 					Following.text = "FOLLOWING: " + picked.friends_count;
 					Followers.text = "FOLLOWERS: " + picked.followers_count;
 					Description.text = "BIO: " + picked.description;
 					Username.text = "@" + picked.screen_name;
 					RealName.text = "NAME: " + picked.name;
 					fullResPhoto = picked.profile_image_url.Replace("_normal", "");
-//					print(fullResPhoto);
 					StartCoroutine(GetPhoto(fullResPhoto));
-				}
+                }
 			}
 		}
 		else
 		{
-			Following.text = "FOLLOWING:";
-			Followers.text = "FOLLOWERS:";
-			Description.text = "BIO:";
-			Username.text = "@";
-			RealName.text = "NAME:";
+            Following.text = "";
+            Followers.text = "";
+            Description.text = "";
+            Username.text = "";
+            RealName.text = "";
+   //         Following.text = "FOLLOWING:";
+			//Followers.text = "FOLLOWERS:";
+			//Description.text = "BIO:";
+			//Username.text = "@";
+			//RealName.text = "NAME:";
 			StartCoroutine(GetPhoto(""));
+            infoPanel.enabled = false;
 
 		}
 	}
