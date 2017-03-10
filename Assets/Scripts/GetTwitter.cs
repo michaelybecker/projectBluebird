@@ -77,7 +77,6 @@ public class GetTwitter : MonoBehaviour
 		{ 
 
 			string request_String = "http://localhost:3000/followers/" + screenName;
-			Vector3 a = targetVector;
 			using (UnityWebRequest request = UnityWebRequest.Get(request_String))
 			{
 				yield return request.Send();

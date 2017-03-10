@@ -25,6 +25,23 @@ public class CreateSphereFromNodes : MonoBehaviour
 	//    public void CreateSphere(string[] a, string screenName, Vector3 targetVector)
 	public void CreateSphere(SingleFollower[] a, string screenName, Vector3 targetVector)
 	{
+        //cleanse
+        if (uspheres.Count > 0)
+        {  
+            foreach (GameObject sphere in uspheres)
+            {
+
+                Destroy(sphere);
+
+            }
+            uspheres.RemoveAll(delegate (GameObject o) { return o == null; });
+            print("destroyed all!");
+        } else
+        {
+            print("no spheres to destroy!");
+        }
+
+
 		int numPoints = a.Length;
 		//Vector3 centerPoint;
 		Vector3[] pts = PointsOnSphere(numPoints);
@@ -145,9 +162,11 @@ public class CreateSphereFromNodes : MonoBehaviour
 		{
 			foreach (GameObject obj in uspheres)
 			{
+                if (obj != null) { 
 				
 				obj.transform.GetChild(0).transform.Rotate(Vector3.up, turnSpeed * Time.deltaTime);
-			}
+                }
+            }
 		}
     
 
