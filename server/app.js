@@ -89,12 +89,12 @@ app.listen(3000, function() {
     console.log('LAUNCHING');
     if (offline) {
         console.log('Running in Offline test mode!');
-        debugMSG = 'Running in Offline test mode!';
+        debugMSG += '\nRunning in Offline test mode!';
         // getFollowers('michaelhazani');
     } else {
         console.log('WARNING: running LIVE!');
         console.log('Client number: ' + clientCounter);
-        debugMSG = 'WARNING: running LIVE, Client number: ' + clientCounter;
+        debugMSG += '\nWARNING: running LIVE, Client number: ' + clientCounter;
         // getFollowers('michaelhazani');
     }
 });
@@ -107,7 +107,7 @@ app.get('/debug', function(req, res) {
     }
     var debugJSON = JSON.stringify(debugMessage);
     res.send(debugJSON);
-    console.log(debugJSON);
+    // console.log(debugJSON);
 });
 
 app.get('/followers/:twitterUser', function(req, res) {
@@ -144,7 +144,7 @@ function getFollowers(username, curCursor, res) { //Twitter API: Get Followers
             var followers = CreateFollowersObject(parsedData);
             followersString = JSON.stringify(followers);
             console.log("sending followers//local! #" + username);
-            debugMSG = "sending followers//local! #" + username;
+            debugMSG += "\n sending followers//local! #" + username;
             res.send(followersString);
         });
 
@@ -180,11 +180,11 @@ function getFollowers(username, curCursor, res) { //Twitter API: Get Followers
                     clientCounter++;
                     curClient = clientArray[clientCounter];
                     console.log("switching client counter to " + clientCounter);
-                    debugMSG = "switching client counter to " + clientCounter;
+                    debugMSG += "\nswitching client counter to " + clientCounter;
                     getFollowers(username, curCursor, res);
                 } else {
                     console.log("max client reached!");
-                    debugMSG = "max client reached!";
+                    debugMSG += "\nmax client reached!";
                     return;
                 }
 
@@ -193,14 +193,14 @@ function getFollowers(username, curCursor, res) { //Twitter API: Get Followers
                 var tempJSON = JSON.parse(response.body);
                 var nextCursor = tempJSON.next_cursor
                 console.log("sending followers//LIVE FROM API " + nextCursor);
-                debugMSG = "sending followers[LIVE] for " + username;
+                debugMSG += "\nsending followers[LIVE] for " + username;
                 var followers = CreateFollowersObject(response);
                 totalFollowersJSON = totalFollowersJSON.concat(followers);
                 if (nextCursor != 0) {
                     getFollowers(username, nextCursor, res);
                 } else {
                     var totalFollowersString = JSON.stringify(totalFollowersJSON);
-                    debugMSG = "API Query for " + username + " Complete!"
+                    debugMSG+= "\nAPI Query for " + username + " Complete!"
                     res.send(totalFollowersString);
 
                     // for dummy local JSON file creation - do not touch otherwise
