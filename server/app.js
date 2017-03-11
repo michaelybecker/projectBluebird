@@ -28,72 +28,86 @@ var success = function(data) {
     console.log('Success!\n' + data);
     sucMsg = data;
 }
+var debugMSG = "";
 
 //OAuth data
 var clientArray = [
-new Twitter({
-    consumer_key: creds1.consumer_key,
-    consumer_secret: creds1.consumer_secret,
-    access_token_key: creds1.access_token_key,
-    access_token_secret: creds1.access_token_secret
-}),
-new Twitter({
-    consumer_key: creds2.consumer_key,
-    consumer_secret: creds2.consumer_secret,
-    access_token_key: creds2.access_token_key,
-    access_token_secret: creds2.access_token_secret
-}),
-new Twitter({
-    consumer_key: creds3.consumer_key,
-    consumer_secret: creds3.consumer_secret,
-    access_token_key: creds3.access_token_key,
-    access_token_secret: creds3.access_token_secret
-}),
-new Twitter({
-    consumer_key: creds4.consumer_key,
-    consumer_secret: creds4.consumer_secret,
-    access_token_key: creds4.access_token_key,
-    access_token_secret: creds4.access_token_secret
-}),
-new Twitter({
-    consumer_key: creds5.consumer_key,
-    consumer_secret: creds5.consumer_secret,
-    access_token_key: creds5.access_token_key,
-    access_token_secret: creds5.access_token_secret
-}),
-new Twitter({
-    consumer_key: creds6.consumer_key,
-    consumer_secret: creds6.consumer_secret,
-    access_token_key: creds6.access_token_key,
-    access_token_secret: creds6.access_token_secret
-}),
-new Twitter({
-    consumer_key: creds7.consumer_key,
-    consumer_secret: creds7.consumer_secret,
-    access_token_key: creds7.access_token_key,
-    access_token_secret: creds7.access_token_secret
-}),
-new Twitter({
-    consumer_key: creds8.consumer_key,
-    consumer_secret: creds8.consumer_secret,
-    access_token_key: creds8.access_token_key,
-    access_token_secret: creds8.access_token_secret
-}),
+    new Twitter({
+        consumer_key: creds1.consumer_key,
+        consumer_secret: creds1.consumer_secret,
+        access_token_key: creds1.access_token_key,
+        access_token_secret: creds1.access_token_secret
+    }),
+    new Twitter({
+        consumer_key: creds2.consumer_key,
+        consumer_secret: creds2.consumer_secret,
+        access_token_key: creds2.access_token_key,
+        access_token_secret: creds2.access_token_secret
+    }),
+    new Twitter({
+        consumer_key: creds3.consumer_key,
+        consumer_secret: creds3.consumer_secret,
+        access_token_key: creds3.access_token_key,
+        access_token_secret: creds3.access_token_secret
+    }),
+    new Twitter({
+        consumer_key: creds4.consumer_key,
+        consumer_secret: creds4.consumer_secret,
+        access_token_key: creds4.access_token_key,
+        access_token_secret: creds4.access_token_secret
+    }),
+    new Twitter({
+        consumer_key: creds5.consumer_key,
+        consumer_secret: creds5.consumer_secret,
+        access_token_key: creds5.access_token_key,
+        access_token_secret: creds5.access_token_secret
+    }),
+    new Twitter({
+        consumer_key: creds6.consumer_key,
+        consumer_secret: creds6.consumer_secret,
+        access_token_key: creds6.access_token_key,
+        access_token_secret: creds6.access_token_secret
+    }),
+    new Twitter({
+        consumer_key: creds7.consumer_key,
+        consumer_secret: creds7.consumer_secret,
+        access_token_key: creds7.access_token_key,
+        access_token_secret: creds7.access_token_secret
+    }),
+    new Twitter({
+        consumer_key: creds8.consumer_key,
+        consumer_secret: creds8.consumer_secret,
+        access_token_key: creds8.access_token_key,
+        access_token_secret: creds8.access_token_secret
+    }),
 ];
 
 var clientCounter = 0;
 var curClient = clientArray[clientCounter];
 
 app.listen(3000, function() {
-    console.log('listening on port 3000!');
+    console.log('LAUNCHING');
     if (offline) {
         console.log('Running in Offline test mode!');
+        debugMSG = 'Running in Offline test mode!';
         // getFollowers('michaelhazani');
     } else {
         console.log('WARNING: running LIVE!');
         console.log('Client number: ' + clientCounter);
+        debugMSG = 'WARNING: running LIVE, Client number: ' + clientCounter;
         // getFollowers('michaelhazani');
     }
+});
+
+//debugging
+app.get('/debug', function(req, res) {
+    var debugMessage = {
+        time: new Date().toLocaleTimeString(),
+        message: debugMSG
+    }
+    var debugJSON = JSON.stringify(debugMessage);
+    res.send(debugJSON);
+    console.log(debugJSON);
 });
 
 app.get('/followers/:twitterUser', function(req, res) {
@@ -130,6 +144,7 @@ function getFollowers(username, curCursor, res) { //Twitter API: Get Followers
             var followers = CreateFollowersObject(parsedData);
             followersString = JSON.stringify(followers);
             console.log("sending followers//local! #" + username);
+            debugMSG = "sending followers//local! #" + username;
             res.send(followersString);
         });
 
@@ -147,6 +162,7 @@ function getFollowers(username, curCursor, res) { //Twitter API: Get Followers
                     if (error) {
                         console.log(error);
                         console.log("error!");
+                        debugMSG = "error retrieving followers!"
                     }
                     var errorMsg = (JSON.parse(response["body"]));
                     var unixTime = errorMsg['resources']['followers']['/followers/list']['reset'];
@@ -160,27 +176,31 @@ function getFollowers(username, curCursor, res) { //Twitter API: Get Followers
                     }, 5000);
                 });
                 //for now, switch creds
-                if(clientCounter < clientArray.length-1) {
-                  clientCounter++;
-                curClient = clientArray[clientCounter];
-                console.log("switching client counter to " + clientCounter);
-                getFollowers(username, curCursor, res);
-              } else {
-                console.log("max client reached!");
-                return;
-              }
+                if (clientCounter < clientArray.length - 1) {
+                    clientCounter++;
+                    curClient = clientArray[clientCounter];
+                    console.log("switching client counter to " + clientCounter);
+                    debugMSG = "switching client counter to " + clientCounter;
+                    getFollowers(username, curCursor, res);
+                } else {
+                    console.log("max client reached!");
+                    debugMSG = "max client reached!";
+                    return;
+                }
 
 
             } else { // if no error
                 var tempJSON = JSON.parse(response.body);
                 var nextCursor = tempJSON.next_cursor
-                console.log("sending followers//LIVE FROM API, cursor#: " + nextCursor);
+                console.log("sending followers//LIVE FROM API " + nextCursor);
+                debugMSG = "sending followers[LIVE] for " + username;
                 var followers = CreateFollowersObject(response);
                 totalFollowersJSON = totalFollowersJSON.concat(followers);
                 if (nextCursor != 0) {
                     getFollowers(username, nextCursor, res);
                 } else {
                     var totalFollowersString = JSON.stringify(totalFollowersJSON);
+                    debugMSG = "API Query for " + username + " Complete!"
                     res.send(totalFollowersString);
 
                     // for dummy local JSON file creation - do not touch otherwise

@@ -27,42 +27,45 @@ public class GetTwitter : MonoBehaviour
 	//	public void enter
 	public void UIHelper(string a)
 	{
-        Debug.Log(a);
-        if(a!="") { 
-		inputField.text = "";
-		Destroy(inputField.gameObject);
-		controller.GetComponent<FirstPersonController>().enabled = true;
-            //debugging and testing
-            if(a == "1") {
-                Init("1", new Vector3(0, 0, 0));
-            } 
-            else if (a == "2")
-            {
-                Init("2", new Vector3(0, 0, 0));
-            }
-            else if (a == "3")
-            {
-                Init("3", new Vector3(0, 0, 0));
-            }
-            else if (a == "4")
-            {
-                Init("4", new Vector3(0, 0, 0));
-            }
-            else { 
-            Init(a, new Vector3(0, 0, 0));
-            }
-        }
-    }
+		print(a);
+		if (a != "")
+		{ 
+			inputField.text = "";
+			Destroy(inputField.gameObject);
+			controller.GetComponent<FirstPersonController>().enabled = true;
+			//debugging and testing
+			if (a == "1")
+			{
+				Init("1", new Vector3(0, 0, 0));
+			}
+			else if (a == "2")
+			{
+				Init("2", new Vector3(0, 0, 0));
+			}
+			else if (a == "3")
+			{
+				Init("3", new Vector3(0, 0, 0));
+			}
+			else if (a == "4")
+			{
+				Init("4", new Vector3(0, 0, 0));
+			}
+			else
+			{ 
+				Init(a, new Vector3(0, 0, 0));
+			}
+		}
+	}
 
-    public void Init(string screenName, Vector3 targetVector)
-    {
+	public void Init(string screenName, Vector3 targetVector)
+	{
 
-        Vector3 a = targetVector;
-        //Debug.Log(a);
-        //Debug.Log("init fired");
-        getFollowers(screenName, a);
+		Vector3 a = targetVector;
+		//Debug.Log(a);
+		//Debug.Log("init fired");
+		getFollowers(screenName, a);
         
-    }
+	}
 
 	void getFollowers(string screenName, Vector3 targetVector)
 	{
@@ -72,7 +75,7 @@ public class GetTwitter : MonoBehaviour
 
 	IEnumerator GetText(string screenName, Vector3 targetVector)
 	{
-		Debug.Log("screename is " + screenName);
+		print("screename is " + screenName);
 		if (screenName != "PlayAreaScripts")
 		{ 
 
@@ -83,7 +86,7 @@ public class GetTwitter : MonoBehaviour
 
 				if (request.isError) // Error
 				{
-					Debug.Log(request.error);
+					print(request.error);
 				}
 				else // Success
 				{
@@ -97,7 +100,7 @@ public class GetTwitter : MonoBehaviour
 		}
 		else
 		{
-			Debug.Log("hit Raycast hit PlayAreaScripts!");
+			print("hit Raycast hit PlayAreaScripts!");
 		}
 	}
 }
