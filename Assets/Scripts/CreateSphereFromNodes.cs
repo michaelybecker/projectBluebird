@@ -6,7 +6,7 @@ using System;
 
 public class CreateSphereFromNodes : MonoBehaviour
 {
-	public GameObject LightSphere;
+	//	public GameObject LightSphere;
 	public GameObject SphereLitFromWithin;
 	List<GameObject> uspheres;
 	public float turnSpeed;
@@ -25,21 +25,25 @@ public class CreateSphereFromNodes : MonoBehaviour
 	//    public void CreateSphere(string[] a, string screenName, Vector3 targetVector)
 	public void CreateSphere(SingleFollower[] a, string screenName, Vector3 targetVector)
 	{
-        //cleanse
-        if (uspheres.Count > 0)
-        {  
-            foreach (GameObject sphere in uspheres)
-            {
+		//cleanse
+		if (uspheres.Count > 0)
+		{  
+			foreach (GameObject sphere in uspheres)
+			{
 
-                Destroy(sphere);
+				Destroy(sphere);
 
-            }
-            uspheres.RemoveAll(delegate (GameObject o) { return o == null; });
-            print("destroyed all!");
-        } else
-        {
-            print("no spheres to destroy!");
-        }
+			}
+			uspheres.RemoveAll(delegate (GameObject o)
+				{
+					return o == null;
+				});
+			print("destroyed all!");
+		}
+		else
+		{
+			print("no spheres to destroy!");
+		}
 
 
 		int numPoints = a.Length;
@@ -88,33 +92,33 @@ public class CreateSphereFromNodes : MonoBehaviour
 			{
 				sphereSizePct = 1.0f;
 
-				scaleColor = pink;
+//				scaleColor = pink;
 			}
 			else if (fNum < 500)
 			{
 				sphereSizePct = 1.5f;
-				scaleColor = Color.red;
+//				scaleColor = Color.red;
 			}
 			else if (fNum < 1000)
 			{
 				sphereSizePct = 3.0f;
-				scaleColor = Color.yellow;
+//				scaleColor = Color.yellow;
 			}
 			else if (fNum < 5000)
 			{
 				sphereSizePct = 10.0f;
-				scaleColor = Color.white;
+//				scaleColor = Color.white;
 			}
 			else
 			{
 				sphereSizePct = 15f;
-				scaleColor = Color.blue;
+//				scaleColor = Color.blue;
 			}
 
 			ab.transform.localScale *= sphereSizePct;
 			ab.GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
-			ab.GetComponent<Renderer>().material.SetColor("_EmissionColor", scaleColor);
-			ab.GetComponent<Renderer>().material.color = scaleColor;
+//			ab.GetComponent<Renderer>().material.SetColor("_EmissionColor", scaleColor);
+//			ab.GetComponent<Renderer>().material.color = scaleColor;
 
 
 			myTextObject.transform.SetParent(tweetParentComponent.transform);
@@ -162,11 +166,12 @@ public class CreateSphereFromNodes : MonoBehaviour
 		{
 			foreach (GameObject obj in uspheres)
 			{
-                if (obj != null) { 
+				if (obj != null)
+				{ 
 				
-				obj.transform.GetChild(0).transform.Rotate(Vector3.up, turnSpeed * Time.deltaTime);
-                }
-            }
+					obj.transform.GetChild(0).transform.Rotate(new Vector3(1.0f, 2.0f, -2.0f), turnSpeed * Time.deltaTime);
+				}
+			}
 		}
     
 

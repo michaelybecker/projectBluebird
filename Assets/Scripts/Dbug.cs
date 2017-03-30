@@ -7,8 +7,8 @@ public class Dbug : MonoBehaviour
 {
 	public UnityEngine.UI.Text DebugLog;
 	public DbugMessage debugObject;
-	public bool isDebugging;
-	public float waitTime = 4.0f;
+	public bool isDebugging = false;
+	public float waitTime = 2.0f;
 	// Use this for initialization
 	void Start()
 	{
@@ -18,17 +18,28 @@ public class Dbug : MonoBehaviour
 			getMessage();
 
 		}
+		else
+		{
+			DebugLog.enabled = false;
 
-
+		}
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
-		if (Input.GetKeyDown("="))
+		if (Input.GetKeyDown("f1"))
 		{
 			isDebugging = !isDebugging;
-			DebugLog.enabled = !DebugLog.isActiveAndEnabled;
+			DebugLog.enabled = !DebugLog.enabled;
+			if (isDebugging)
+			{
+				getMessage();
+			}
+			else
+			{
+				StopAllCoroutines();
+			}
 		}
 	}
 
@@ -54,6 +65,7 @@ public class Dbug : MonoBehaviour
 			if (request.isError) // Error
 			{
 				print(request.error);
+				DebugLog.text = debugObject.time + "\n" + request.error;
 				StopAllCoroutines();
 
 			}

@@ -18,17 +18,9 @@ var creds6 = require('./creds/creds6.js');
 var creds7 = require('./creds/creds7.js');
 var creds8 = require('./creds/creds8.js');
 
-var errMsg, sucMsg;
-var error = function(err, response, body) {
-    console.log('ERROR \n');
-    console.log(err);
-    errMsg = err;
-};
-var success = function(data) {
-    console.log('Success!\n' + data);
-    sucMsg = data;
-}
+var totalUsersJSON = [];
 var debugMSG = "";
+var both = false;
 
 //OAuth data
 var clientArray = [
@@ -89,13 +81,12 @@ app.listen(3000, function() {
     console.log('LAUNCHING');
     if (offline) {
         console.log('Running in Offline test mode!');
-        debugMSG += '\nRunning in Offline test mode!';
+        debugMSG = '\nRunning in Offline test mode!';
         // getFollowers('michaelhazani');
     } else {
         console.log('WARNING: running LIVE!');
         console.log('Client number: ' + clientCounter);
-        debugMSG += '\nWARNING: running LIVE, Client number: ' + clientCounter;
-        // getFollowers('michaelhazani');
+        debugMSG = '\nWARNING: running LIVE, Client number: ' + clientCounter;
     }
 });
 
@@ -111,16 +102,22 @@ app.get('/debug', function(req, res) {
 });
 
 app.get('/followers/:twitterUser', function(req, res) {
-    var response = res;
-    // console.log("app.get, response: ");
-    // console.log(res);
-    getFollowers(req.params.twitterUser, -1, res);
+    totalUsersJSON = [];
+    both = false;
+    getUsers(req.params.twitterUser, -1, res);
 });
 
-//-----------------------------------DATA FETCHING/PARSING HELPERS---------------------------------------------
-var totalFollowersJSON = [];
+app.get('/friends/:twitterUser', function(req, res) {
+    totalUsersJSON = [];
+    both = true;
+    getUsers(req.params.twitterUser, -1, res);
+});
 
-function getFollowers(username, curCursor, res) { //Twitter API: Get Followers
+
+//-----------------------------------DATA FETCHING/PARSING HELPERS---------------------------------------------
+
+
+function getUsers(username, curCursor, res) { //Twitter API: Get Followers
     // console.log("getFollowers res,: ")
     // console.log(res);
     var localJSON;
@@ -141,11 +138,11 @@ function getFollowers(username, curCursor, res) { //Twitter API: Get Followers
             if (err) throw err;
             // console.log(data);
             var parsedData = JSON.parse(data);
-            var followers = CreateFollowersObject(parsedData);
-            followersString = JSON.stringify(followers);
+            var users = CreateJSONObject(parsedData);
+            usersString = JSON.stringify(users);
             console.log("sending followers//local! #" + username);
-            debugMSG += "\n sending followers//local! #" + username;
-            res.send(followersString);
+            debugMSG = "\n sending followers//local! #" + username;
+            res.send(usersString);
         });
 
     } else { // online realtime fetch:
@@ -155,36 +152,36 @@ function getFollowers(username, curCursor, res) { //Twitter API: Get Followers
             count: 200
         }, function(error, tweet, response) {
             if (error) { // prob. api call rate limit
-                console.log(error);
-                curClient.get('/application/rate_limit_status.json', {
-                    resources: 'followers'
-                }, function(error, tweet, response) {
-                    if (error) {
-                        console.log(error);
-                        console.log("error!");
-                        debugMSG = "error retrieving followers!"
-                    }
-                    var errorMsg = (JSON.parse(response["body"]));
-                    var unixTime = errorMsg['resources']['followers']['/followers/list']['reset'];
-                    var targetDate = new Date(unixTime);
-                    var currentDate = new Date();
-                    var diffDate = new Date(targetDate - currentDate);
-                    console.log("hours: " + diffDate.getHours() + " minutes: " + diffDate.getMinutes() + " seconds: " + diffDate.getSeconds());
-                    console.log("milliseconds: " + diffDate.getMilliseconds());
-                    setTimeout(function() {
-                        //getFollowers(userName, curCursor);
-                    }, 5000);
-                });
+                // console.log(error);
+                // curClient.get('/application/rate_limit_status.json', {
+                //     resources: 'followers'
+                // }, function(error, tweet, response) {
+                //     if (error) {
+                //         console.log(error);
+                //         console.log("error!");
+                //         debugMSG = "error retrieving followers!"
+                //     }
+                //     var errorMsg = (JSON.parse(response["body"]));
+                //     var unixTime = errorMsg['resources']['followers']['/followers/list']['reset'];
+                //     var targetDate = new Date(unixTime);
+                //     var currentDate = new Date();
+                //     var diffDate = new Date(targetDate - currentDate);
+                //     console.log("hours: " + diffDate.getHours() + " minutes: " + diffDate.getMinutes() + " seconds: " + diffDate.getSeconds());
+                //     console.log("milliseconds: " + diffDate.getMilliseconds());
+                //     setTimeout(function() {
+                //         //getFollowers(userName, curCursor);
+                //     }, 5000);
+                // });
                 //for now, switch creds
                 if (clientCounter < clientArray.length - 1) {
                     clientCounter++;
                     curClient = clientArray[clientCounter];
                     console.log("switching client counter to " + clientCounter);
-                    debugMSG += "\nswitching client counter to " + clientCounter;
-                    getFollowers(username, curCursor, res);
+                    debugMSG = "\nswitching client counter to " + clientCounter;
+                    getUsers(username, curCursor, res);
                 } else {
                     console.log("max client reached!");
-                    debugMSG += "\nmax client reached!";
+                    debugMSG = "\nmax client reached!";
                     return;
                 }
 
@@ -192,16 +189,18 @@ function getFollowers(username, curCursor, res) { //Twitter API: Get Followers
             } else { // if no error
                 var tempJSON = JSON.parse(response.body);
                 var nextCursor = tempJSON.next_cursor
-                console.log("sending followers//LIVE FROM API " + nextCursor);
-                debugMSG += "\nsending followers[LIVE] for " + username;
-                var followers = CreateFollowersObject(response);
-                totalFollowersJSON = totalFollowersJSON.concat(followers);
+                console.log("sending users//LIVE FROM API " + nextCursor);
+                debugMSG = "\nsending users[LIVE] for " + username;
+                // console.log(response);
+                var users = CreateJSONObject(response, "friends");
+                totalUsersJSON = totalUsersJSON.concat(users);
                 if (nextCursor != 0) {
-                    getFollowers(username, nextCursor, res);
+                    getUsers(username, nextCursor, res);
                 } else {
-                    var totalFollowersString = JSON.stringify(totalFollowersJSON);
-                    debugMSG+= "\nAPI Query for " + username + " Complete!"
-                    res.send(totalFollowersString);
+                    var totalUsersString = JSON.stringify(totalUsersJSON);
+
+                    debugMSG = "\nAPI Query for " + username + " Complete!"
+                    res.send(totalUsersString);
 
                     // for dummy local JSON file creation - do not touch otherwise
                     // var fullMsgString = JSON.stringify(response);
@@ -220,31 +219,42 @@ function getFollowers(username, curCursor, res) { //Twitter API: Get Followers
     }
 }
 
-function CreateFollowersObject(data) { //from Followers response, create data objects that'll be passed to Unity
-    var followers = [];
+function CreateJSONObject(data) { //from Followers response, create data objects that'll be passed to Unity
+    console.log("creating JSON object");
+    var returnedUsers = [];
     var body = JSON.parse(data["body"]);
     var users = body["users"];
     for (obj in users) {
-        var tempfollower = {};
-        tempfollower["id"] = users[obj]["id"];
-        tempfollower["screen_name"] = users[obj]["screen_name"];
-        tempfollower["name"] = users[obj]["name"];
-        tempfollower["location"] = users[obj]["location"];
-        tempfollower["url"] = users[obj]["url"];
-        tempfollower["description"] = users[obj]["description"];
-        tempfollower["followers_count"] = users[obj]["followers_count"];
-        tempfollower["friends_count"] = users[obj]["friends_count"];
-        tempfollower["profile_image_url"] = users[obj]["profile_image_url"];
+        var tempUser = {};
+        tempUser["id"] = users[obj]["id"];
+        tempUser["screen_name"] = users[obj]["screen_name"];
+        tempUser["name"] = users[obj]["name"];
+        tempUser["location"] = users[obj]["location"];
+        tempUser["url"] = users[obj]["url"];
+        tempUser["description"] = users[obj]["description"];
+        tempUser["followers_count"] = users[obj]["followers_count"];
+        tempUser["friends_count"] = users[obj]["friends_count"];
+        tempUser["profile_image_url"] = users[obj]["profile_image_url"];
+        // console.log(tempUser["screen_name"] + "is followed by you? " + users[obj]["following"]);
         //object
-        followers.push(tempfollower);
+        if (both = false) {
+            returnedUsers.push(tempUser);
+        } else {
+            if (users[obj]["following"] == true) {
+              console.log("user " + tempUser["screen_name"] + " is a friend! Adding.");
+                returnedUsers.push(tempUser);
+            }
+        }
     }
-    if (users != undefined) {
-        console.log("return user length: " + users.length);
+
+    if (returnedUsers.length > 0) {
+        console.log("return user length: " + returnedUsers.length);
         // console.log("first element in this batch:");
         // console.log(users[users.length-1].name);
-        return followers;
+        return returnedUsers;
     }
 }
+
 
 
 

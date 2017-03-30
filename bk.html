@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Hello, Gatsby!</title>
+    <meta name="description" content="Gatsby Example">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/0.5.0/aframe.min.js"></script>
+    <!-- <script src="https://rawgit.com/bestiejs/platform.js/master/platform.js"></script> -->
+    <!-- <script src="https://rawgit.com/protyze/aframe-always-fullscreen-component/master/dist/aframe-always-fullscreen-component.min.js"></script> -->
+    <script src="https://unpkg.com/aframe-text-geometry-component@^0.5.0/dist/aframe-text-geometry-component.min.js"></script>
+</head>
+
+<body>
+    <!-- <a-scene embedded always-fullscreen> -->
+    <a-scene>
+        <a-assets>
+ <a-asset-item id="desk-obj" src="./Assets/desk.obj"></a-asset-item>
+ <a-asset-item id="desk-mtl" src="./Assets/desk.mtl"></a-asset-item>
+            <!-- <a-asset-item id="bed-src" src="./Assets/bed.dae"></a-asset-item> -->
+            <a-asset-item id="arrow-obj" src="./Assets/arrow.obj"></a-asset-item>
+            <a-asset-item id="optimerBoldFont" src="https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/fonts/helvetiker_regular.typeface.json"></a-asset-item>
+
+        </a-assets>
+        <a-sky src="./Assets/room.jpg" rotation="0 -130 0"></a-sky>
+        <a-entity id="furniture">
+            <a-entity cursor-listener id="desk" obj-model="obj: #desk-obj; mtl: #desk-mtl" position="-126 -60 10" rotation="-90 120 -9" scale="0.05 0.05 0.05"></a-entity>
+            <!-- <a-entity cursor-listener id="bed" collada-model="#bed-src" position="-15 -4 -1" rotation="-182 158 181" scale="3 3 3"></a-entity> -->
+        </a-entity>
+        <a-entity text-geometry="value: Hello, Gatsby Ready!; font: #optimerBoldFont" position="-4 3 -10" color="0x008B8B"></a-entity>
+        <a-entity id="arrowleft" cursor-listener obj-model="obj: #arrow-obj" scale="0.1 0.1 0.1" position="-5 2 2" rotation="90 0 4" material="side: double; color: #008B8B; transparent: true; opacity: 0.5"></a-entity>
+        <a-entity id="arrowright" cursor-listener obj-model="obj: #arrow-obj" scale="0.1 0.1 0.1" position="-5 2 0" rotation="270 0 4" material="side: double; color: #008B8B; transparent: true; opacity: 0.5"></a-entity>
+        <a-entity id="arrowbackward" cursor-listener obj-model="obj: #arrow-obj" scale="0.1 0.1 0.1" position="-5 1 1" rotation="180 0 4" material="side: double; color: #008B8B; transparent: true; opacity: 0.5"></a-entity>
+        <a-entity id="arrowforward" cursor-listener obj-model="obj: #arrow-obj" scale="0.1 0.1 0.1" position="-5 3 1" rotation="0 0 4" material="side: double; color: #008B8B; transparent: true; opacity: 0.5"></a-entity>
+        <a-entity id="arrowturnleft" cursor-listener obj-model="obj: #arrow-obj" scale="0.05 0.05 0.05" position="-5 3 2" rotation="-45 0 4" material="side: double; color: #008B8B; transparent: true; opacity: 0.5"></a-entity>
+        <a-entity id="arrowturnright" cursor-listener obj-model="obj: #arrow-obj" scale="0.05 0.05 0.05" position="-5 3 0" rotation="45 0 4" material="side: double; color: #008B8B; transparent: true; opacity: 0.5"></a-entity>
+        <a-camera>
+            <a-entity cursor="fuse: true; fuseTimeout: 500" position="0 0 -1" geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03" material="color: black; shader: flat">
+            </a-entity>
+        </a-camera>
+    </a-scene>
+    <script src="./app.js"></script>
+
+</body>
+
+</html>

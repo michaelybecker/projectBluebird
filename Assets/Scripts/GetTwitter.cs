@@ -13,6 +13,14 @@ public class GetTwitter : MonoBehaviour
 	//	public GameObject player;
 	public FirstPersonController controller;
 	public UnityEngine.UI.InputField inputField;
+	public UnityEngine.UI.Button getFollowersBtn;
+	public UnityEngine.UI.Button getFriendsBtn;
+	public UnityEngine.UI.Button getFollowingBtn;
+	public FirstPersonController fpsCont;
+	public UnityEngine.UI.Text DebugLog;
+	//	MouseLook ml;
+
+	string actType = "";
 
 	public void Start()
 	{
@@ -20,18 +28,26 @@ public class GetTwitter : MonoBehaviour
 		createSphereFromNodes = GameObject.Find("SphereCenter").GetComponent<CreateSphereFromNodes>();
 
 		inputField.Select();
-
-
+		Cursor.lockState = CursorLockMode.None;
 	}
 
 	//	public void enter
-	public void UIHelper(string a)
+	public void UIHelper(string actionType)
 	{
-		print(a);
+		actType = actionType;
+		print("action type is " + actType);
+//		Cursor.visible = false;
+
+		Cursor.lockState = CursorLockMode.Locked;
+		var a = inputField.text;
+		print("it is " + a);
 		if (a != "")
 		{ 
 			inputField.text = "";
 			Destroy(inputField.gameObject);
+			Destroy(getFollowersBtn.gameObject);
+			Destroy(getFriendsBtn.gameObject);
+			Destroy(getFollowingBtn.gameObject);
 			controller.GetComponent<FirstPersonController>().enabled = true;
 			//debugging and testing
 			if (a == "1")
@@ -78,8 +94,18 @@ public class GetTwitter : MonoBehaviour
 		print("screename is " + screenName);
 		if (screenName != "PlayAreaScripts")
 		{ 
+			string request_String = "";
 
-			string request_String = "http://localhost:3000/followers/" + screenName;
+			if (actType == "followers")
+			{
+				print("getting followers");
+				request_String = "http://localhost:3000/followers/" + screenName;
+			}
+			else if (actType == "friends")
+			{
+				print("getting friends");
+				request_String = "http://localhost:3000/friends/" + screenName;
+			}
 			using (UnityWebRequest request = UnityWebRequest.Get(request_String))
 			{
 				yield return request.Send();
@@ -87,6 +113,7 @@ public class GetTwitter : MonoBehaviour
 				if (request.isError) // Error
 				{
 					print(request.error);
+
 				}
 				else // Success
 				{
