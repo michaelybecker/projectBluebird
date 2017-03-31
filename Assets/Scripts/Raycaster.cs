@@ -45,7 +45,7 @@ public class Raycaster : MonoBehaviour
 				if (Input.GetButtonDown("Fire1"))
 				{
 					tele.startGTP(hit.collider.transform.position);
-					getTwitter.Init(hit.collider.name, hit.collider.transform.position);
+//					getTwitter.Init(hit.collider.name, hit.collider.transform.position);
 				}
 			}
 		}

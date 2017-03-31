@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class teleport : MonoBehaviour {
+public class teleport : MonoBehaviour
+{
 
-    private float startTime;
-    private float journeyLength;
-    public float time = 3.0f;
-    public float speed = 5.0f;
-    public GameObject player;
+	private float startTime;
+	private float journeyLength;
+	public float time = 3.0f;
+	public float speed = 5.0f;
+	public GameObject player;
 
- //   // Use this for initialization
- //   void Start () {
+	//   // Use this for initialization
+	//   void Start () {
 		
 	//}
 	
@@ -20,28 +21,29 @@ public class teleport : MonoBehaviour {
 		
 	//}
     
-    public void startGTP(Vector3 dest)
-    {
-        StartCoroutine(GoToPlanet(dest));
-    }
+	public void startGTP(Vector3 dest)
+	{
+		StartCoroutine(GoToPlanet(dest));
+	}
 
-    private IEnumerator GoToPlanet(Vector3 dest) {
-        print("going to " + dest + " in " + time);
-        Vector3 curPos = player.transform.position;
-        float elapsed = 0;
-        while (elapsed < (time))
-        {
+	private IEnumerator GoToPlanet(Vector3 dest)
+	{
+//        print("going to " + dest + " in " + time);
+		Vector3 curPos = player.transform.position;
+		float elapsed = 0;
+		while (elapsed < (time - time / 6))
+		{
+			print(elapsed);
+			player.transform.position = Vector3.Lerp(player.transform.position, dest, (elapsed / time * speed));
+			yield return null;
 
-            player.transform.position = Vector3.Lerp(player.transform.position, dest, (elapsed / time * speed));
-            yield return null;
+			//print("curpos: " + curPos);
+			//print("dest: " + dest);
+			elapsed += Time.deltaTime;
+		}
+		print("Done!");
+//		player.transform.position = dest;
+		elapsed = 0.0f;
 
-            //print("curpos: " + curPos);
-            //print("dest: " + dest);
-            elapsed += Time.deltaTime;
-        }
-        print("Done!");
-        player.transform.position = dest;
-        elapsed = 0.0f;
-
-    }
+	}
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityStandardAssets.Characters.FirstPerson;
 
+
 //using UnityEngine.Events
 
 public class GetTwitter : MonoBehaviour
@@ -18,7 +19,8 @@ public class GetTwitter : MonoBehaviour
 	public UnityEngine.UI.Button getFollowingBtn;
 	public FirstPersonController fpsCont;
 	public UnityEngine.UI.Text DebugLog;
-	//	MouseLook ml;
+	public GameObject GUI;
+
 
 	string actType = "";
 
@@ -44,10 +46,11 @@ public class GetTwitter : MonoBehaviour
 		if (a != "")
 		{ 
 			inputField.text = "";
-			Destroy(inputField.gameObject);
-			Destroy(getFollowersBtn.gameObject);
-			Destroy(getFriendsBtn.gameObject);
-			Destroy(getFollowingBtn.gameObject);
+			GUI.SetActive(false);
+//			Destroy(inputField.gameObject);
+//			Destroy(getFollowersBtn.gameObject);
+//			Destroy(getFriendsBtn.gameObject);
+//			Destroy(getFollowingBtn.gameObject);
 			controller.GetComponent<FirstPersonController>().enabled = true;
 			//debugging and testing
 			if (a == "1")
